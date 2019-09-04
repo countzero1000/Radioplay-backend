@@ -355,7 +355,7 @@ app.get('/generateNew', (req, res) => {
 
             stream.on('close', ()=> {
                 console.log('closed');
-                res.end()
+                //res.end()
             });
             stream.on('end',()=>{  
                 console.log('ended');
