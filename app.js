@@ -345,7 +345,9 @@ app.get('/generateNew', (req, res) => {
             
             let stream = ofs.createReadStream('finalCut.wav',{autoClose:true});
 
-
+            res.set({
+                'Content-Type':'audio/x-wav'
+            })
 
             stream.on('data',(chunk)=>{
                 res.write(chunk);
