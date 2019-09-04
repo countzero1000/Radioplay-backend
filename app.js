@@ -339,7 +339,7 @@ main = async () => {
 app.get('/generateNew', (req, res) => {
 
     main()
-        .then(() => {
+        .then( async () => {
                 
             
             res.writeHead(200,{
@@ -352,9 +352,16 @@ app.get('/generateNew', (req, res) => {
             })
 
             let stream = ofs.createReadStream('finalCut.wav',{autoClose:true});
-            stream.pipe(res).on('finish',()=>{
-                console.log('finished')
-            });
+
+            await new Promise((resolve,reject)=>{
+                stream.pipe(res,{end:false})
+                stream.on('end', () => {
+                    resolve();
+                })
+            })
+
+            res.end();
+            
        
         });
 
