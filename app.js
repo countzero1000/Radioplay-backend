@@ -342,7 +342,7 @@ app.get('/generateNew', (req, res) => {
         .then( async () => {
                 
             
-            res.set({
+            res.header({
                
                 'Content-Type' : 'audio/x-wav',
                 'Connection' : 'keep-alive',
@@ -352,7 +352,7 @@ app.get('/generateNew', (req, res) => {
             })
 
             let stream = ofs.createReadStream('finalCut.wav',{autoClose:true});
-            stream.pipe(res,{autoClose:true});
+            stream.pipe(res);
 
         
             
