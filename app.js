@@ -352,11 +352,14 @@ app.get('/generateNew', (req, res) => {
             })
 
             let stream = ofs.createReadStream('finalCut.wav',{autoClose:true});
-            stream.pipe(res,{close:false});
+            stream.pipe(res,{end:false});
 
-            stream.on('end',()=>{
+            stream.on('close',()=>{
                 res.end();
             })
+
+
+            
 
         
             
