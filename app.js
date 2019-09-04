@@ -340,11 +340,11 @@ app.get('/generateNew', (req, res) => {
 
     main()
         .then(() => {
+                
             
-
             res.writeHead(200,{
                
-                'Content-Type' : 'audio/wav',
+                'Content-Type' : 'audio/x-wav',
                 'Connection' : 'keep-alive',
                 'Transfer-Encoding': 'chunked',
                 'Accept-Encoding':'gzip,deflate',
