@@ -342,7 +342,7 @@ app.get('/generateNew', (req, res) => {
         .then(() => {
             
 
-            res.writeHead(206,{
+            res.writeHead(200,{
                
                 'Content-Type' : 'audio/wav',
                 'Connection' : 'keep-alive',
@@ -355,17 +355,14 @@ app.get('/generateNew', (req, res) => {
             let stream = ofs.createReadStream('finalCut.wav');
 
 
-            stream.on('end', ()=> {
-                console.log("end!")
-                res.status(200);
+            stream.pipe(res, {end:false} )
+
+            stream.on('end',()=>{
+                console.log('here!')
                 res.end();
-           });
-           
-            stream.on('data',(chunk)=>{
-                res.write(chunk);
-                })
+            })
             
-            });
+    });
 
 
 })
