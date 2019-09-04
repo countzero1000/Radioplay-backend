@@ -342,19 +342,30 @@ app.get('/generateNew', (req, res) => {
         .then(() => {
             
 
-            res.writeHead(200,{
+            res.writeHead(206,{
                
                 'Content-Type' : 'audio/wav',
                 'Connection' : 'keep-alive',
                 'Transfer-Encoding': 'chunked',
+                'Accept-Ranges': 'bytes',
                 'Accept-Encoding':'gzip,deflate'
+            
             })
 
             let stream = ofs.createReadStream('finalCut.wav');
-            stream.on('end', ()=> res.end());
-            stream.pipe(res);
 
-        });
+
+            stream.on('end', ()=> {
+                console.log("end!")
+                res.status(200);
+                res.end();
+           });
+           
+            stream.on('data',(chunk)=>{
+                res.write(chunk);
+                })
+            
+            });
 
 
 })
