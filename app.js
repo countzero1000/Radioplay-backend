@@ -161,6 +161,10 @@ downloadFile = async (file) => {
                 console.log("finished ", fName);
                 resolve();
             })
+
+            readStream.on('error',(err)=>{
+                reject(err);
+            })
       
 
     })
@@ -324,6 +328,8 @@ main = async () => {
                         let sorted = await sortLines(files);
                         await buildTimeLine(nlines, nchars, sorted, pLT);
                         resolve();
+                    }).catch((err)=>{
+                        reject(err);
                     })
                     
                 
@@ -363,7 +369,15 @@ app.get('/generateNew', (req, res) => {
                 console.log(err)
             })
 
-            
+
+            res.on('drain',()=>{
+                console.log('stream draining');
+            })
+
+            res.on('close',()=>{
+                console.log('stream closed')
+            })
+
             res.on('finish',()=>{
                 console.log('stream finished');
             })
@@ -375,7 +389,9 @@ app.get('/generateNew', (req, res) => {
         
             
        
-        });
+        }).catch((err)=>{
+            throw new Error(err);
+        })
 
 
 })
