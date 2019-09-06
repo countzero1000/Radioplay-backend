@@ -351,13 +351,24 @@ app.get('/generateNew', (req, res) => {
                 'Accept-Ranges': 'bytes'
             })
 
-            let stream = ofs.createReadStream('finalCut.wav',{autoClose:true});
-            stream.pipe(res,{end:false});
+            let stream = ofs.createReadStream('finalCut.wav');
 
-            stream.on('close',()=>{
-                res.end();
+            stream.pipe(res);
+            
+            res.on('error',(err)=>{
+                console.log(err);
             })
 
+            stream.on('error',(err)=>{
+                console.log(err)
+            })
+
+            
+            res.on('finish',()=>{
+                console.log('stream finished');
+            })
+
+          
 
             
 
