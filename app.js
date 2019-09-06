@@ -359,8 +359,13 @@ app.get('/generateNew', (req, res) => {
 
             let stream = ofs.createReadStream('finalCut.wav');
 
-            stream.pipe(res);
             
+            
+            stream.on('open', ()=>{
+                console.log('read stream is open');
+                stream.pipe(res);
+            })
+
             res.on('error',(err)=>{
                 console.log(err);
             })
