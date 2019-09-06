@@ -369,18 +369,36 @@ app.get('/generateNew', (req, res) => {
                 console.log(err)
             })
 
+            stream.on('pause',()=>{
+                console.log('reading paused')
+            })
+
+            stream.on('resume',()=>{
+                console.log('reading resumed')
+            })
+
+            stream.on('end',()=>{
+                console.log('reading ended');
+            })
+
+            stream.on('close',()=>{
+                console.log('reading closed');
+            })
+
 
             res.on('drain',()=>{
-                console.log('stream draining');
+                console.log('writing draining');
             })
 
             res.on('close',()=>{
-                console.log('stream closed')
+                console.log('writing closed')
             })
 
             res.on('finish',()=>{
-                console.log('stream finished');
+                console.log('writing finished');
             })
+
+            
 
           
 
