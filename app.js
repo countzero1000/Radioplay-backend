@@ -72,7 +72,7 @@ let laughs = ['a_laugh track 1_01.wav',
 
 
 
-
+let building = 0;
 
 
 makeRequestForNewLineFiles = async (lines) => {
@@ -344,6 +344,8 @@ main = async () => {
 
 app.get('/playScript', (req, res) => {
             
+
+    if(!building){
             res.header({
                
                 'Content-Type' : 'audio/x-wav',
@@ -401,7 +403,9 @@ app.get('/playScript', (req, res) => {
             })
 
             
-
+        }else{
+            res.send('script is still building')
+        }
           
 
             
@@ -415,8 +419,22 @@ app.get('/playScript', (req, res) => {
 
 
 app.get('/generateNew',(req,res)=>{
-    main();
-    res.send('buildingScript');
+
+
+    if(!building){
+
+        building = true;
+        res.send('buildingScript');
+        main().then(()=>{
+
+            building = false;
+
+        });
+        
+    }else{
+        res.send('script is still building')
+    }
+    
 })
 
 
