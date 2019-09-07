@@ -362,7 +362,6 @@ app.get('/playScript', (req, res) => {
             stream.on('open', ()=>{
                 console.log('read stream is open');
                 stream.pipe(res);
-                mongoose.connection.close();
             })
 
             res.on('error',(err)=>{
@@ -373,34 +372,14 @@ app.get('/playScript', (req, res) => {
                 console.log(err)
             })
 
-            stream.on('pause',()=>{
-                console.log('reading paused')
-            })
+            
 
-            stream.on('resume',()=>{
-                console.log('reading resumed')
-            })
-
-            stream.on('end',()=>{
-                console.log('reading ended');
-            })
-
-            stream.on('close',()=>{
-                console.log('reading closed');
-            })
+           
 
 
-            res.on('drain',()=>{
-                console.log('writing draining');
-            })
 
-            res.on('close',()=>{
-                console.log('writing closed')
-            })
 
-            res.on('finish',()=>{
-                console.log('writing finished');
-            })
+        
 
             
 
