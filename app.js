@@ -342,11 +342,7 @@ main = async () => {
 }
 
 
-app.get('/generateNew', (req, res) => {
-
-   /* main()
-        .then( async () => {*/
-                
+app.get('/playScript', (req, res) => {
             
             res.header({
                
@@ -413,11 +409,14 @@ app.get('/generateNew', (req, res) => {
         
             
        
-      /*  }).catch((err)=>{
-            throw new Error(err);
-        })*/
 
 
+})
+
+
+app.get('/generateNew',(req,res)=>{
+    main();
+    res.send('buildingScript');
 })
 
 
