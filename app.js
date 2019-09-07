@@ -20,7 +20,7 @@ let mongoOptions = {
 
 const mongURI = 'mongodb+srv://Admin:iamadmin@cluster0-bqnw7.mongodb.net/test?retryWrites=true&w=majority';
 
-mongoose.connect(mongURI, mongoOptions);
+
 
 app = express();
 
@@ -417,8 +417,12 @@ app.get('/playScript', (req, res) => {
 
 app.get('/generateNew',(req,res)=>{
     console.log('begin building script')
+    mongoose.connect(mongURI, mongoOptions);
     main().then(()=>{
         res.send('script is done');
+        mongoose.connection.close();
+    }).catch((err)=>{
+        res.send(err);
     })
 
 })
