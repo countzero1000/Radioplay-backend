@@ -72,7 +72,7 @@ let laughs = ['a_laugh track 1_01.wav',
 
 
 
-let building = 0;
+
 
 
 makeRequestForNewLineFiles = async (lines) => {
@@ -314,8 +314,8 @@ main = async () => {
         let lines = [];
 
         await makeRequestForNewLineFiles(lines);
-    
-        await axios.post(speechLocal + speechRoute,
+        console.log('posting to speech synth')
+        await axios.post(speechCloud + speechRoute,
 
             { scriptData: lines }).then(async (res) => {
 
@@ -323,7 +323,7 @@ main = async () => {
                 let files = await res.data;
              
 
-
+                    console.log('downloading files')
                     downloadAll(files).then(async()=>{
                         let sorted = await sortLines(files);
                         await buildTimeLine(nlines, nchars, sorted, pLT);
@@ -343,9 +343,9 @@ main = async () => {
 
 
 app.get('/playScript', (req, res) => {
-            
 
-    if(!building){
+                
+            
             res.header({
                
                 'Content-Type' : 'audio/x-wav',
@@ -403,38 +403,24 @@ app.get('/playScript', (req, res) => {
             })
 
             
-        }else{
-            res.send('script is still building')
-        }
+
           
 
             
 
         
-            
-       
-
+        
 
 })
 
 
+
 app.get('/generateNew',(req,res)=>{
+    console.log('begin building script')
+    main().then(()=>{
+        res.send('script is done');
+    })
 
-
-    if(!building){
-
-        building = true;
-        res.send('buildingScript');
-        main().then(()=>{
-
-            building = false;
-
-        });
-        
-    }else{
-        res.send('script is still building')
-    }
-    
 })
 
 
