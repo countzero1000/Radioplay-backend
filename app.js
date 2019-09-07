@@ -9,7 +9,6 @@ const ofs = require('fs');
 const norm = require('gaussian');
 const express = require('express');
 
-
 process.setMaxListeners(0);
 
 
@@ -19,7 +18,7 @@ let mongoOptions = {
     useNewUrlParser: true
 }
 
-const mongURI = 'mongodb+srv://Admin:iamadmin@mismatch-lla7j.azure.mongodb.net/test?retryWrites=true&w=majority';
+const mongURI = 'mongodb+srv://Admin:iamadmin@cluster0-bqnw7.mongodb.net/test?retryWrites=true&w=majority';
 
 mongoose.connect(mongURI, mongoOptions);
 
@@ -129,8 +128,8 @@ makeRequestForNewLineFiles = async (lines) => {
 
 
 
-downloadAll = (files) =>{
-    return Promise.all(files.map(downloadFile));
+downloadAll = async (files) =>{
+    return Promise.all(files.map(await downloadFile));
 }
 
 
@@ -143,6 +142,8 @@ downloadFile = async (file) => {
 
             let gfs = Grid(mongoose.connection.db, mongoose.mongo);
             let fName = file.fileName;
+
+      
 
             while (!(await gfs.exist({ filename: fName }))) {
                 console.log('waiting on ', fName);
@@ -313,9 +314,8 @@ main = async () => {
         let lines = [];
 
         await makeRequestForNewLineFiles(lines);
-
-
-        await axios.post(speechCloud + speechRoute,
+    
+        await axios.post(speechLocal + speechRoute,
 
             { scriptData: lines }).then(async (res) => {
 
@@ -344,8 +344,8 @@ main = async () => {
 
 app.get('/generateNew', (req, res) => {
 
-    main()
-        .then( async () => {
+   /* main()
+        .then( async () => {*/
                 
             
             res.header({
@@ -364,6 +364,7 @@ app.get('/generateNew', (req, res) => {
             stream.on('open', ()=>{
                 console.log('read stream is open');
                 stream.pipe(res);
+                mongoose.connection.close();
             })
 
             res.on('error',(err)=>{
@@ -412,9 +413,9 @@ app.get('/generateNew', (req, res) => {
         
             
        
-        }).catch((err)=>{
+      /*  }).catch((err)=>{
             throw new Error(err);
-        })
+        })*/
 
 
 })
