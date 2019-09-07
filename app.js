@@ -346,16 +346,18 @@ app.get('/playScript', (req, res) => {
 
                 
             
-            res.header({
+            /*res.header({
                
                 'Content-Type' : 'audio/x-wav',
                 'Connection' : 'keep-alive',
                 'Transfer-Encoding': 'chunked',
                 'Accept-Encoding':'gzip,deflate',
                 'Accept-Ranges': 'bytes'
-            })
+            })*/
 
-            let stream = ofs.createReadStream('finalCut.wav');
+            res.sendFile(__dirname + '/finalCut.wav');
+
+            /*let stream = ofs.createReadStream('finalCut.wav');
 
             
             
@@ -370,7 +372,7 @@ app.get('/playScript', (req, res) => {
 
             stream.on('error',(err)=>{
                 console.log(err)
-            })
+            })*/
 
             
 
