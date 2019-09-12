@@ -316,7 +316,7 @@ main = async (params) => {
 
         await makeRequestForNewLineFiles(lines);
         console.log('posting to speech synth')
-        await axios.post(speechLocal + speechRoute,
+        await axios.post(speechCloud + speechRoute,
 
             { scriptData: lines }).then(async (res) => {
 
