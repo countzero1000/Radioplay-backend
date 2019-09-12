@@ -26,7 +26,7 @@ app = express();
 
 
 let folderName = 'tmpScript/'
-let pLT = .2;
+
 let nchars = 2;
 let nlines = 18;
 let pskipchar = 0.25;
@@ -69,7 +69,6 @@ let laughs = ['a_laugh track 1_01.wav',
     'a_laugh track 1_34.wav',
     'a_laugh track 1_35 (extended chuckle).wav',
     'a_laugh track 1_36 (oooh!).wav']
-
 
 
 
@@ -212,7 +211,7 @@ sortLines = async (lines, nchars, nlines, pskipchar) => {
 
 
 
-buildTimeLine = async (nlines, nchars, linesTime) => {
+buildTimeLine = async (nlines, nchars, linesTime,params) => {
 
     let totalLines = nchars * nlines;
 
@@ -245,9 +244,9 @@ buildTimeLine = async (nlines, nchars, linesTime) => {
         if (currentCharacter == nchars) kchar++;
 
 
-        if (Math.random() < pLT) {
+        if (Math.random() < params.pLT) {
 
-            totalTime += Cldist();
+            totalTime += CLdist(params.CLmean,params.CLdev);
 
             let laugh = "laughs/" + laughs[Math.floor(Math.random() * (laughs.length - 1))]
 
@@ -257,14 +256,14 @@ buildTimeLine = async (nlines, nchars, linesTime) => {
 
             totalTime += data.format.duration;
 
-            totalTime += LCdist();
+            totalTime += LCdist(params.LCmean,params.LCdev);
 
             kLT = kLT + 1;
 
 
         } else {
 
-            totalTime += CCdist();
+            totalTime += CCdist(params.CCmean,params.CCdev);
 
         }
 
@@ -286,26 +285,28 @@ buildTimeLine = async (nlines, nchars, linesTime) => {
 
 
 
-CCdist = () => {
-
-    return norm(.1, .1).ppf(Math.random())
+CCdist = (mean = .1,stdDev = .1) => {
+    console.log(mean,stdDev)
+    return norm(mean, stdDev).ppf(Math.random())
 
 }
 
-Cldist = () => {
-
-    return norm(.4, .2).ppf(Math.random())
+CLdist = (mean = .4,stdDev = .2) => {
+    console.log(mean,stdDev)
+    return norm(mean, stdDev).ppf(Math.random())
 }
 
-LCdist = () => {
+LCdist = (mean = .5 ,stdDev = .7) => {
 
-    return norm(.5, .7).ppf(Math.random());
+    console.log(mean,stdDev)
+
+    return norm(mean, stdDev).ppf(Math.random());
 }
 
 
 
 
-main = async () => {
+main = async (params) => {
 
 
     return new Promise(async (resolve, reject) => {
@@ -315,7 +316,7 @@ main = async () => {
 
         await makeRequestForNewLineFiles(lines);
         console.log('posting to speech synth')
-        await axios.post(speechCloud + speechRoute,
+        await axios.post(speechLocal + speechRoute,
 
             { scriptData: lines }).then(async (res) => {
 
@@ -326,7 +327,7 @@ main = async () => {
                     console.log('downloading files')
                     downloadAll(files).then(async()=>{
                         let sorted = await sortLines(files);
-                        await buildTimeLine(nlines, nchars, sorted, pLT);
+                        await buildTimeLine(nlines, nchars, sorted,params);
                         resolve();
                     }).catch((err)=>{
                         reject(err);
@@ -396,10 +397,11 @@ app.get('/playScript', (req, res) => {
 
 
 
-app.get('/generateNew',(req,res)=>{
+app.post('/generateNew',(req,res)=>{
     console.log('begin building script')
+
     mongoose.connect(mongURI, mongoOptions);
-    main().then(()=>{
+    main(req.query).then(()=>{
         res.send('script is done');
         mongoose.connection.close();
     }).catch((err)=>{
