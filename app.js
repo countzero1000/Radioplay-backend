@@ -211,7 +211,7 @@ sortLines = async (lines, nchars, nlines, pskipchar) => {
 
 
 
-buildTimeLine = async (nlines, nchars, linesTime,params) => {
+buildTimeLine = async (nlines, nchars, linesTime,params, pLT = .2) => {
 
     let totalLines = nchars * nlines;
 
@@ -244,7 +244,7 @@ buildTimeLine = async (nlines, nchars, linesTime,params) => {
         if (currentCharacter == nchars) kchar++;
 
 
-        if (Math.random() < params.pLT) {
+        if (Math.random() < pLT) {
 
             totalTime += CLdist(params.CLmean,params.CLdev);
 
@@ -327,7 +327,7 @@ main = async (params) => {
                     console.log('downloading files')
                     downloadAll(files).then(async()=>{
                         let sorted = await sortLines(files);
-                        await buildTimeLine(nlines, nchars, sorted,params);
+                        await buildTimeLine(nlines, nchars, sorted,params,params.pLT);
                         resolve();
                     }).catch((err)=>{
                         reject(err);
@@ -397,8 +397,10 @@ app.get('/playScript', (req, res) => {
 
 
 
-app.post('/generateNew',(req,res)=>{
+app.get('/generateNew',(req,res)=>{
+
     console.log('begin building script')
+    console.log(req.query);
 
     mongoose.connect(mongURI, mongoOptions);
     main(req.query).then(()=>{
