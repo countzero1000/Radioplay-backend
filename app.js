@@ -404,6 +404,7 @@ app.get('/generateNew',(req,res)=>{
 
     mongoose.connect(mongURI, mongoOptions);
     main(req.query).then(()=>{
+        res.header('Access-Control-Allow-Origin', '*');
         res.send('script is done');
         mongoose.connection.close();
     }).catch((err)=>{
