@@ -355,7 +355,7 @@ app.get('/playScript', (req, res) => {
                 'Accept-Encoding':'gzip,deflate',
                 'Accept-Ranges': 'bytes'
             })*/
-
+            res.header('Access-Control-Allow-Origin', '*');
             res.sendFile(__dirname + '/finalCut.wav');
 
             /*let stream = ofs.createReadStream('finalCut.wav');
