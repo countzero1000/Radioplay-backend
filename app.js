@@ -142,6 +142,10 @@ downloadFile = async (file) => {
             let gfs = Grid(mongoose.connection.db, mongoose.mongo);
             let fName = file.fileName;
 
+            while (!(await gfs.exist({ filename: fName }))) {
+                console.log('waiting on ', fName);
+            }
+
     
 
             console.log(fName, " found");
@@ -311,6 +315,7 @@ main = async (params) => {
 
         await makeRequestForNewLineFiles(lines);
         console.log('posting to speech synth')
+
         await axios.post(speechCloud + speechRoute,
 
             { scriptData: lines }).then(async (res) => {
@@ -342,6 +347,8 @@ app.get('/playScript', (req, res) => {
 
             
           
+          
+            res.header('Cache-Control','no-cache');
             res.header('Access-Control-Allow-Origin', '*');
             res.sendFile(__dirname + '/finalCut.wav');
         
@@ -354,7 +361,7 @@ app.get('/generateNew',(req,res)=>{
 
     console.log('begin building script')
     console.log(req.query);
-    
+
     res.header('Access-Control-Allow-Origin', '*');
 
     mongoose.connect(mongURI, mongoOptions);
