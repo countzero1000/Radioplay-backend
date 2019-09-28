@@ -29,7 +29,7 @@ let folderName = 'tmpScript/'
 
 let nchars = 2;
 let nlines = 18;
-let pskipchar = 0.25;
+
 const speechCloud = "https://speech-synth.herokuapp.com";
 let speechLocal = 'http://localhost:3000';
 let speechRoute = '/tts/payload';
@@ -211,7 +211,7 @@ sortLines = async (lines, nchars, nlines, pskipchar) => {
 
 
 
-buildTimeLine = async (nlines, nchars, linesTime,params, pLT = .2) => {
+buildTimeLine = async (pskipchar = .25,nlines, nchars, linesTime,params, pLT = .2) => {
 
     let totalLines = nchars * nlines;
 
@@ -327,7 +327,7 @@ main = async (params) => {
                     console.log('downloading files')
                     downloadAll(files).then(async()=>{
                         let sorted = await sortLines(files);
-                        await buildTimeLine(nlines, nchars, sorted,params,params.pLT);
+                        await buildTimeLine(params.pskipchar,nlines, nchars, sorted,params,params.pLT);
                         resolve();
                     }).catch((err)=>{
                         reject(err);
