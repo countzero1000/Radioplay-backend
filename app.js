@@ -340,53 +340,10 @@ main = async (params) => {
 
 app.get('/playScript', (req, res) => {
 
-                
             
-            /*res.header({
-               
-                'Content-Type' : 'audio/x-wav',
-                'Connection' : 'keep-alive',
-                'Transfer-Encoding': 'chunked',
-                'Accept-Encoding':'gzip,deflate',
-                'Accept-Ranges': 'bytes'
-            })*/
           
             res.header('Access-Control-Allow-Origin', '*');
             res.sendFile(__dirname + '/finalCut.wav');
-
-            /*let stream = ofs.createReadStream('finalCut.wav');
-
-            
-            
-            stream.on('open', ()=>{
-                console.log('read stream is open');
-                stream.pipe(res);
-            })
-
-            res.on('error',(err)=>{
-                console.log(err);
-            })
-
-            stream.on('error',(err)=>{
-                console.log(err)
-            })*/
-
-            
-
-           
-
-
-
-
-        
-
-            
-
-          
-
-            
-
-        
         
 
 })
