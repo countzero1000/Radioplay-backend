@@ -142,11 +142,7 @@ downloadFile = async (file) => {
             let gfs = Grid(mongoose.connection.db, mongoose.mongo);
             let fName = file.fileName;
 
-      
-
-            while (!(await gfs.exist({ filename: fName }))) {
-                console.log('waiting on ', fName);
-            }
+    
 
             console.log(fName, " found");
 
@@ -158,7 +154,6 @@ downloadFile = async (file) => {
 
             readStream.pipe(ofs.createWriteStream(folderName + fName));
             readStream.on("end",()=>{
-                console.log("finished ", fName);
                 resolve();
             })
 
@@ -286,19 +281,19 @@ buildTimeLine = async (pskipchar = .25,nlines, nchars, linesTime,params, pLT = .
 
 
 CCdist = (mean = .1,stdDev = .1) => {
-    console.log(mean,stdDev)
+ 
     return norm(mean, stdDev).ppf(Math.random())
 
 }
 
 CLdist = (mean = .4,stdDev = .2) => {
-    console.log(mean,stdDev)
+
     return norm(mean, stdDev).ppf(Math.random())
 }
 
 LCdist = (mean = .5 ,stdDev = .7) => {
 
-    console.log(mean,stdDev)
+  
 
     return norm(mean, stdDev).ppf(Math.random());
 }
@@ -355,7 +350,7 @@ app.get('/playScript', (req, res) => {
                 'Accept-Encoding':'gzip,deflate',
                 'Accept-Ranges': 'bytes'
             })*/
-            res.header('Cache-Control','no-cache');
+          
             res.header('Access-Control-Allow-Origin', '*');
             res.sendFile(__dirname + '/finalCut.wav');
 
@@ -430,7 +425,7 @@ app.get('/', function (req, res) {
 });
 
 app.listen(port, function () {
- console.log(`Example app listening on port !`);
+ console.log(`Listening on port`);
 });
 
 
