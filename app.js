@@ -30,7 +30,7 @@ let folderName = 'tmpScript/'
 let nchars = 2;
 let nlines = 18;
 
-const speechCloud = "https://speech-synth.herokuapp.com";
+const speechCloud = "https://radioplaytts.herokuapp.com";
 let speechLocal = 'http://localhost:3000';
 let speechRoute = '/tts/payload';
 
@@ -314,6 +314,7 @@ main = async (params) => {
         let lines = [];
 
         await makeRequestForNewLineFiles(lines);
+
         console.log('posting to speech synth')
 
         await axios.post(speechCloud + speechRoute,
@@ -326,9 +327,13 @@ main = async (params) => {
 
                     console.log('downloading files')
                     downloadAll(files).then(async()=>{
+                        
                         let sorted = await sortLines(files);
+
                         await buildTimeLine(params.pskipchar,nlines, nchars, sorted,params,params.pLT);
+
                         resolve();
+
                     }).catch((err)=>{
                         reject(err);
                     })
@@ -365,6 +370,7 @@ app.get('/generateNew',(req,res)=>{
     res.header('Access-Control-Allow-Origin', '*');
 
     mongoose.connect(mongURI, mongoOptions);
+
     main(req.query).then(()=>{
         
         res.send('script is done');
