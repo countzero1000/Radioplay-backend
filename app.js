@@ -78,19 +78,16 @@ makeRequestForNewLineFiles = async (lines) => {
 
     return new Promise( async(resolve, reject) => {
 
-      
-
     
-
-
             //get Jerry's lines
 
             for (let i = 0; i < nlines; i++) {
 
-                let index = Math.floor(Math.random() * (64))
+                let gIndex = Math.floor(Math.random() * (808))
+                let jIndex = Math.floor(Math.random() * (398))
 
                 await Line.find({
-                    index: index,
+                    index: gIndex,
                     character: "George"
                 }).then(async (line) => {
                     let reqline = {
@@ -103,7 +100,7 @@ makeRequestForNewLineFiles = async (lines) => {
                 })
 
                 await Line.find({
-                    index: index,
+                    index: jIndex,
                     character: "Jerry"
                 }).then(async (line) => {
                     let reqline = {
@@ -116,10 +113,9 @@ makeRequestForNewLineFiles = async (lines) => {
                 })
             }
 
-    
+
             resolve();
       
-
 
     })
 
